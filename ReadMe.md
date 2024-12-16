@@ -38,7 +38,7 @@ Build the Docker image by running the following command
  docker build -t docker_test .
 ```
 
- -**Run a container to export to ldeploy_output from target looker instance**:
+ **#Run a container to export to ldeploy_output from target looker instance**:
  Run the docker image running the following command in terminal
  ```
     docker run \
@@ -66,7 +66,7 @@ optional arguments:
 
 **After running this command, all dashboards from the source should be visibile in the deployer_output folder on your local machine**
 
--**Run a container to import to looker instance**:
+**#Run a container to import to looker instance**:
  Run the docker image running the following command in terminal
  ```
     docker run \
