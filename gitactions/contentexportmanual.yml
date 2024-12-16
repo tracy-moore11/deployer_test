@@ -1,0 +1,62 @@
+name: ContentExportManual
+# Controls when the action will run. 
+on:
+  workflow_dispatch:
+    inputs:
+      BRANCH:
+        description: 'What branch to export to'
+        required: true
+        default: 'master'
+      ENV:
+        description: 'What environment to export from'
+        required: true
+        default: 'int'
+      FOLDERS:
+        description: 'List of folders to export, eg 1 5 6'
+        required: true
+        default: '1'
+jobs:
+  content_export:
+    runs-on: ubuntu-18.04
+    container:
+      image: us-docker.pkg.dev/mcramer/deployer/deployer
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: Set up config
+        run: |
+          cat <<EOT >> looker.ini
+          [dev]
+          base_url=https://looker.bytecode.io:19999 
+          client_id=$DEV_CLIENT_ID
+          client_secret=$DEV_SECRET
+          verify_ssl=True
+          
+          [prod]
+          base_url=https://bytecodeef.looker.com:19999
+          client_id=$PROD_CLIENT_ID
+          client_secret=$PROD_SECRET
+          verify_ssl=True
+          EOT
+      - name: Check out branch
+        run: |
+          git fetch --all
+          git checkout ${{github.event.inputs.BRANCH}} || git checkout -b ${{github.event.inputs.BRANCH}}
+          git pull
+      - name: export_content
+        run: |
+          rm -rf ./content 
+          ldeploy content export --env ${{github.event.inputs.ENV}} --folders ${{github.event.inputs.FOLDERS}} --local-target ./content/
+        
+      - name: Commit files
+        run: |
+          git config --local user.email "github_action@noreply.com"
+          git config --local user.name "github-actions[bot]"
+          git add ./
+          git commit -m "Add changes" -a
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{github.event.inputs.BRANCH}}
