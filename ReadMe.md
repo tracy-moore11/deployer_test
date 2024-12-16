@@ -38,7 +38,7 @@ Build the Docker image by running the following command
  docker build -t docker_test .
 ```
 
- **#Run a container to export to ldeploy_output from target looker instance**:
+ #Run a container to export to ldeploy_output from target looker instance:
  Run the docker image running the following command in terminal
  ```
     docker run \
@@ -47,7 +47,7 @@ Build the Docker image by running the following command
     ldeploy content export --ini /ldeploy_settings/looker.ini --local-target /ldeploy_output --env dev --folders 1
  ```
 
-## ldeploy content export options
+### ldeploy content export options
 ```
 usage: ldeploy content export [-h] --env ENV [--ini INI] [--debug] --folders
                               FOLDERS [FOLDERS ...] --local-target
@@ -66,7 +66,7 @@ optional arguments:
 
 **After running this command, all dashboards from the source should be visibile in the deployer_output folder on your local machine**
 
-**#Run a container to import to looker instance**:
+#Run a container to import to looker instance:
  Run the docker image running the following command in terminal
  ```
     docker run \
@@ -75,7 +75,7 @@ optional arguments:
     ldeploy content import --ini /ldeploy_settings/looker.ini --folders /ldeploy_output/Shared --env prod --recursive --target-folder Shared
  ```
 
-## ldeploy content import options
+### ldeploy content import options
 ```
 usage: ldeploy content import [-h] --env ENV [--ini INI] [--debug]
                               [--recursive] [--target-folder TARGET_FOLDER]
