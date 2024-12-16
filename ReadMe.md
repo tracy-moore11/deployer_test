@@ -40,6 +40,7 @@ Build the Docker image by running the following command
 
  ## Run a container to export to ldeploy_output from target looker instance:
  Run the docker image in terminal
+ 
  Example command:
  ```
     docker run \
@@ -73,7 +74,8 @@ optional arguments:
 
 ## Run a container to import to looker instance:
  Run the docker image in terminal
- Example command:
+ 
+Example command:
  ```
     docker run \
     -v /Users/tracy/Documents/Dev/Docker/deployer_test/ldeploy_settings:/ldeploy_settings \
