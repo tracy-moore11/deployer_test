@@ -12,7 +12,7 @@ on:
       PROJECT:
         description: 'What project are we deploying to'
         required: true
-        default: 'symendpoc'
+        default: <<Project Name>>
       HOST:
         description: 'Host url for Looker'
         required: true
