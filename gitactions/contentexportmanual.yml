@@ -19,7 +19,7 @@ jobs:
   content_export:
     runs-on: ubuntu-18.04
     container:
-      image: us-docker.pkg.dev/mcramer/deployer/deployer
+      image: <<Docker Image for Export>>
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - name: Checkout repository
@@ -28,13 +28,13 @@ jobs:
         run: |
           cat <<EOT >> looker.ini
           [dev]
-          base_url=https://looker.bytecode.io:19999 
+          base_url=https://looker-dev.cloud.google.com:443
           client_id=$DEV_CLIENT_ID
           client_secret=$DEV_SECRET
           verify_ssl=True
           
           [prod]
-          base_url=https://bytecodeef.looker.com:19999
+          base_url=https://looker-prod.cloud.google.com:443
           client_id=$PROD_CLIENT_ID
           client_secret=$PROD_SECRET
           verify_ssl=True

@@ -1,0 +1,71 @@
+name: Deploy
+
+# Controls when the action will run. 
+on:
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+    inputs:
+      BRANCH:
+        description: 'What branch to deploy'
+        required: true
+        default: 'master'
+      PROJECT:
+        description: 'What project are we deploying to'
+        required: true
+        default: 'symendpoc'
+      HOST:
+        description: 'Host url for Looker'
+        required: true
+        default: 'https://bytecodeef.looker.com:19999'
+        
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  content_import:
+    runs-on: ubuntu-18.04
+    container:
+      image: <<Docker image for deploy>>
+
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      
+      - name: Set up config
+        run: |
+          cat <<EOT >> looker.ini
+          [dev]
+          base_url=https://looker-dev.cloud.google.com:443
+          client_id=$DEV_CLIENT_ID
+          client_secret=$DEV_SECRET
+          verify_ssl=True
+          
+          [prod]
+          base_url=https://looker-prod.cloud.google.com:443
+          client_id=$PROD_CLIENT_ID
+          client_secret=$PROD_SECRET
+          verify_ssl=True
+          EOT
+          cat looker.ini
+        env:
+          DEV_CLIENT_ID: ${{ secrets.DEV_CLIENT_ID }}
+          DEV_SECRET: ${{ secrets.DEV_SECRET }}
+          PROD_CLIENT_ID: ${{ secrets.PROD_CLIENT_ID }}
+          PROD_SECRET: ${{ secrets.PROD_SECRET }}
+     
+      - name: import_content
+        run: |
+          git checkout $BRANCH
+          ldeploy content import --env prod --folders ./content/Shared --recursive --target-folder Shared/mcramer_test
+        
+      - name: deploy_code
+        run: |
+          echo $HOST
+          response=`curl -k --request POST --fail --silent --show-error "${{github.event.inputs.HOST}}/api/3.1/login?client_id=${{env.PROD_CLIENT_ID}}&client_secret=${{env.PROD_SECRET}}"`
+          export ACCESS_TOKEN=`echo $response | jq --raw-output '.access_token'`
+          echo "Got access token $ACCESS_TOKEN"
+          echo "${{github.event.inputs.HOST}}/projects/${{github.event.inputs.PROJECT}}/deploy_ref_to_production?branch=${{github.event.inputs.BRANCH}}"
+          curl -k --request POST --silent --show-error -H "Authorization: token $ACCESS_TOKEN" "${{github.event.inputs.HOST}}/api/3.1/projects/${{github.event.inputs.PROJECT}}/deploy_ref_to_production?branch=${{github.event.inputs.BRANCH}}"
+        env:
+          PROD_CLIENT_ID: ${{ secrets.PROD_CLIENT_ID }}
+          PROD_SECRET: ${{ secrets.PROD_SECRET }}
