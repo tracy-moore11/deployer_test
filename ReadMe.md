@@ -39,7 +39,8 @@ Build the Docker image by running the following command
 ```
 
  ## Run a container to export to ldeploy_output from target looker instance:
- Run the docker image running the following command in terminal
+ Run the docker image in terminal
+ Example command:
  ```
     docker run \
     -v /Users/tracy/Documents/Dev/Docker/deployer_test/ldeploy_settings:/ldeploy_settings \
@@ -71,7 +72,8 @@ optional arguments:
 **After running this command, all dashboards from the source should be visibile in the deployer_output folder on your local machine**
 
 ## Run a container to import to looker instance:
- Run the docker image running the following command in terminal
+ Run the docker image in terminal
+ Example command:
  ```
     docker run \
     -v /Users/tracy/Documents/Dev/Docker/deployer_test/ldeploy_settings:/ldeploy_settings \
