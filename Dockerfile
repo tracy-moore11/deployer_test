@@ -13,15 +13,3 @@ COPY looker.ini  .
 RUN pip install .
 
 ENTRYPOINT ["ldeploy"]
-
-##for export
-# docker run \
-# -v /Users/tracy/Documents/Dev/Docker/deployer_test/ldeploy_settings:/ldeploy_settings \
-# -v /Users/tracy/Documents/Dev/Docker/deployer_test/ldeploy_output:/ldeploy_output \
-# ldeploy content export --ini /ldeploy_settings/looker.ini --local-target /ldeploy_output --env dev --folders 1
-
-##for import
-#docker run \
-#-v /Users/tracy/Documents/Dev/Docker/deployer_test/ldeploy_settings:/ldeploy_settings \
-#-v /Users/tracy/Documents/Dev/Docker/deployer_test/ldeploy_output:/ldeploy_output \
-#ldeploy content import --ini /ldeploy_settings/looker.ini --folders /ldeploy_output/Shared --env prod --recursive --target-folder Shared
