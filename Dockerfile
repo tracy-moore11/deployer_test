@@ -9,7 +9,6 @@ RUN git clone https://github.com/looker-open-source/looker_deployer.git
 
 WORKDIR /looker_deployer
 
-COPY looker.ini  .
 RUN pip install .
 
 ENTRYPOINT ["ldeploy"]

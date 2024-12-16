@@ -35,7 +35,7 @@ Use the following steps to run deployer
 ## Build the Docker image:
 Build the Docker image by running the following command
 ```
- docker build -t docker_test .
+ docker build -t ldeploy .
 ```
 
  ## Run a container to export to ldeploy_output from target looker instance:
@@ -44,7 +44,11 @@ Build the Docker image by running the following command
     docker run \
     -v /Users/tracy/Documents/Dev/Docker/deployer_test/ldeploy_settings:/ldeploy_settings \
     -v /Users/tracy/Documents/Dev/Docker/deployer_test/ldeploy_output:/ldeploy_output \
-    ldeploy content export --ini /ldeploy_settings/looker.ini --local-target /ldeploy_output --env dev --folders 1
+    ldeploy content export \
+    --ini /ldeploy_settings/looker.ini \
+    --local-target /ldeploy_output \
+    --env dev \
+    --folders 1
  ```
 
 ### ldeploy content export options**
@@ -72,7 +76,11 @@ optional arguments:
     docker run \
     -v /Users/tracy/Documents/Dev/Docker/deployer_test/ldeploy_settings:/ldeploy_settings \
     -v /Users/tracy/Documents/Dev/Docker/deployer_test/ldeploy_output:/ldeploy_output \
-    ldeploy content import --ini /ldeploy_settings/looker.ini --folders /ldeploy_output/Shared --env prod --recursive --target-folder Shared
+    ldeploy content import --ini /ldeploy_settings/looker.ini \
+    --folders /ldeploy_output/Shared \
+    --env prod \
+    --recursive \
+    --target-folder Shared
  ```
 
 ### ldeploy content import options
